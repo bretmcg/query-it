@@ -3,12 +3,16 @@
       border: none;
       border-bottom: .5vmin solid $silver-chalice;
       bottom: $padding;
+      opacity: 0;
       padding-bottom: 10px;
       position: absolute;
       transition: border-bottom 200ms ease, transform 400ms ease, opacity 400ms linear;
       width: 25%;
       &.is-hidden {
         opacity: 0;
+      }
+      &.is-active {
+        opacity: 1;
       }
       &.is-submitted {
         border-bottom: .5vw solid rgba($silver-chalice, 0);
@@ -24,9 +28,6 @@
 
       &--team-one {
         left: $padding;
-        &.is-active {
-          top: 0;
-        }
 
         .player-input__checkmark {
           margin-left: -5.5vw;
@@ -80,19 +81,28 @@
     &__input {
       animation: pulse 2s infinite;
       background-color: transparent;
+      border: 0;
       color: white;
       display: inline;
       font-size: 2.5vw;
       font-weight: 100;
       min-height: 6.5vh;
+      padding: 0;
       padding-bottom: 20px;
       transition: color 600ms ease;
       vertical-align: middle;
-      width: 100%;
+      width: 99%;
       -webkit-appearance: none;
 
-      &--right:after {
-        float: right;
+      &:focus {
+        outline: 0;
+      }
+
+      &--right {
+        text-align: right;
+        &:after {
+          float: right;
+        }
       }
 
 

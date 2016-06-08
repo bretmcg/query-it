@@ -84,7 +84,6 @@ export default class SocketDebugger {
 
   @autobind
   onKeyPress(e) {
-    e.preventDefault();
     if (e.keyCode === 13) {
       if (e.shiftKey) {
         this.submitPlayerAnswer(2);

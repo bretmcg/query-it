@@ -22,7 +22,7 @@ const opts = () => {
       },
       {
         name: 'animateQuestion',
-        timer: TimerStore(16, false, true),
+        timer: TimerStore(32, false, true),
         score: {
           visible: false
         }

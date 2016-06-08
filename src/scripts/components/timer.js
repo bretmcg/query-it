@@ -2,6 +2,7 @@
  * This module sets up the timer component
  *
  */
+import $ from 'jquery';
 import View from '../structures/view';
 import { autobind } from 'core-decorators';
 import EVENTS from '../events/timer';
@@ -55,13 +56,14 @@ export default class Timer extends View {
       this.time++;
     }
 
+    $(document).trigger(EVENTS.TIME, this.time);
     this.timeout = setTimeout(this.startTimer.bind(null, cb), timing);
     this.display = this.countDown ? this.time : parseFloat(this.time / 10, 1).toFixed(1);
 
     if (!this.countDown) {
       this.stateClass = 'is-counter';
     }
-    if (this.countDown && (this.time <= 16 && this.time >= 4)) {
+    if (this.countDown && (this.time <= 30 && this.time >= 4)) {
       if (this.visible) {
         socket.sound(SOUNDS.TIMER, [1, 2]);
       }
@@ -77,6 +79,12 @@ export default class Timer extends View {
     }
 
     this.reInitCycle();
+  }
+
+  restartatnubmer(number) {
+    this.time = number;
+    this.stateClass = '';
+    this.$element.find('.js-timer').removeClass('is-almost-out');
   }
 
   /**

@@ -39,7 +39,7 @@ export default class Question extends Panel {
     this.state = getState.connectAt('Question', id);
     this.state.current = this.state.stages[this.state.key];
     this.contents = this.state.data;
-
+    this.player1Done = false;
     this.id = id + 1;
     this.inputValues = [{answer: ''},{answer: ''}];
   }
@@ -147,7 +147,6 @@ export default class Question extends Panel {
     const animate = current && current.name === 'animateQuestion';
     const scrim = $('.bg');
     const reInitTimer = current && current.name === 'showSequel' ? 500 : 0 ;
-
     if (!current) {
       scrim.removeClass('is-active');
       return this.done();
@@ -156,13 +155,17 @@ export default class Question extends Panel {
     if (current.name === 'animateQuestion') {
       $(document).on(EVENTS_PLAYER.KEYPRESS, this.getInputValue);
       $(document).on(EVENTS_PLAYER.ANSWER_SUBMITTED, this.answersLockedIn);
+      $(document).on(EVENTS_PLAYER.ANSWER1_SUBMITTED, this.playerOneSubmitted);
+      $(document).on(TIMER_EVENTS.TIME, this.playerOneTimeUp);
     } else {
+      $(document).off(EVENTS_PLAYER.ANSWER1_SUBMITTED, this.playerOneSubmitted);
       $(document).off(EVENTS_PLAYER.KEYPRESS, this.getInputValue);
       $(document).off(EVENTS_PLAYER.ANSWER_SUBMITTED, this.answersLockedIn);
+      $(document).off(TIMER_EVENTS.TIME, this.playerOneTimeUp);
     }
 
     if (current.name === 'showSequel') {
-      this.firstComp('PlayerInput').onTimerDone(null, 'timeout');
+      this.firstComp('PlayerInput').checkValues(null, 'timeout');
       setState.pushAnswers(this.inputValues);
     }
 
@@ -200,6 +203,28 @@ export default class Question extends Panel {
     }, reInitTimer);
   }
 
+  @autobind
+  playerTwoReady(e, data) {
+    this.firstComp('Timer').restartatnubmer(15);
+    this.firstComp('Timer').isActive();
+    this.firstComp('PlayerInput').player2Visible();
+    this.player1Done = true;
+  }
+
+  @autobind
+  playerOneSubmitted () {
+    if (!this.player1Done) {
+      this.playerTwoReady();
+    }
+  }
+
+  @autobind
+  playerOneTimeUp (e, data) {
+    if (data === 0 && !this.player1Done) {
+      this.playerTwoReady();
+    }
+  }
+
   /**
    *
    * @function activatePlayerInput
@@ -211,6 +236,7 @@ export default class Question extends Panel {
   activatePlayerInput() {
     this.firstComp('PlayerInput').visible();
     this.firstComp('Timer').isActive();
+    this.firstComp('Timer').restartatnubmer(15);
     this.firstComp('Timer').startTimer(()=>{
       this.incrementStep();
       this.firstComp('Timer').stopTimer();

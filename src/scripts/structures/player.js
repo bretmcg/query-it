@@ -43,7 +43,7 @@ export default class Player extends View {
    */
   @autobind
   setActive(player, client) {
-    player.addClass('is-active').find('.player__copy').text('Ready Player ' + client);
+    player.addClass('is-active').find('.player__copy').text('Let\'\s Play!');
   }
 
   /**
@@ -71,7 +71,7 @@ export default class Player extends View {
     }
 
     if(!this.entered) {
-      this.timeout = setTimeout(cb, 4000);
+      this.timeout = setTimeout(cb, 1000);
       this.entered = true;
     }
 

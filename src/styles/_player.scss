@@ -11,7 +11,8 @@
     bottom: $padding;
     font-size: 2vw;
     font-weight: 200;
-    left: $padding;
+    left: 50%;
+    transform: translateX(-50%);
     position: absolute;
     &.is-active .player__copy {
       animation: none;
@@ -40,6 +41,7 @@
     font-weight: 400;
   }
   &__press--two {
+    opacity: 0;
     left: auto;
     right: $padding;
     &.is-active .player__copy {
